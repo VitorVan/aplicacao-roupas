@@ -37,8 +37,7 @@ def calculate_circularity(binary_image, largest_contour, perimeter):
     circularity = (4 * np.pi * area) / (perimeter ** 2)
     return circularity
 
-def calculate_shape_features(image_data, threshold=0.6):
-    image = io.imread(image_data)
+def calculate_shape_features(image, threshold=0.6):
     if image.shape[2] == 4:
         image = color.rgba2rgb(image)
     image_gray = color.rgb2gray(image)
@@ -93,10 +92,10 @@ def calculate_texture_features(image):
     texture_features = np.hstack([lbp_hist, contrast, dissimilarity, homogeneity, energy, correlation])
     return texture_features
 
-def extract_features(image_data):
-    shape_features = calculate_shape_features(image_data)
-    image_data.seek(0)
-    image = io.imread(image_data)
+def extract_features(image):
+    shape_features = calculate_shape_features(image)
+    # image_data.seek(0)
+    # image = io.imread(image_data)
     color_histogram = calculate_color_histogram(image)
     texture_features = calculate_texture_features(image)
     all_features = np.hstack([shape_features, color_histogram, texture_features])

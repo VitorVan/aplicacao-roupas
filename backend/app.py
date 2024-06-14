@@ -3,6 +3,8 @@ import shutil
 import uuid
 import time
 from io import BytesIO 
+from skimage import io, color, measure, filters, exposure, img_as_ubyte
+from PIL import Image
 import uvicorn
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,7 +31,7 @@ def postUploadHandler(file: UploadFile):
     print(file.filename)
     if not file.filename.endswith(".png") and not file.filename.endswith(".jpg") and not file.filename.endswith(".jpeg"):
         raise HTTPException(status_code=401, detail="Arquivo deve estar em .png, .jpg ou .jpeg")
-
+    
     # Ler o arquivo para memória
     image_data = file.file.read()
 
@@ -37,12 +39,21 @@ def postUploadHandler(file: UploadFile):
     image_no_bg = remove_bg(BytesIO(image_data))
 
     # Extrair as características da imagem sem fundo
-    features = extract_features(image_no_bg)
+    image = io.imread(image_no_bg)
+    features = extract_features(image)
+
 
     # Salvar a imagem sem fundo em um caminho temporário
-    image_no_bg_path = f"photos/temp_{uuid.uuid4()}.png"
-    with open(image_no_bg_path, "wb") as buffer:
-        buffer.write(image_no_bg.getvalue())
+    # image_no_bg_path = f"photos/temp_{uuid.uuid4()}.jpg"
+    # with open(image_no_bg_path, "wb") as buffer:
+    #     shutil.copyfileobj(image_data, buffer)
+    generatedUuid = str(uuid.uuid4())
+    file_path = f"photos/{generatedUuid + os.path.splitext(file.filename)[1]}"
+
+    with open(file_path, "wb") as buffer:
+        output = Image.fromarray(image)
+        output.save(buffer, format="JPEG")
+   
 
     return {"features": features.tolist()}
 
