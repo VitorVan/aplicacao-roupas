@@ -94,9 +94,7 @@ def calculate_texture_features(image):
 
 def extract_features(image):
     shape_features = calculate_shape_features(image)
-    # image_data.seek(0)
-    # image = io.imread(image_data)
     color_histogram = calculate_color_histogram(image)
     texture_features = calculate_texture_features(image)
-    all_features = np.hstack([shape_features, color_histogram, texture_features])
+    all_features = np.hstack([shape_features, texture_features])
     return all_features

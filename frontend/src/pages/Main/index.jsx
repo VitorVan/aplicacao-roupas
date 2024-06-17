@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import httpClient from "../../app/services/httpClient";
 
 import Upload from '../../components/Upload'
-import { Button } from "antd";
+import { Button, message } from "antd";
 
 const locale = {
   emptyText: (
@@ -83,8 +83,24 @@ export default function Main() {
       setLoading(true);
       const fmData = new FormData();
       fmData.append("file", file);
-      const response = await httpClient.post("/upload", fmData);
+      const response = await httpClient.post("/clipupload", fmData);
       setData(response.data);
+      console.log(response)
+    } catch (error) { 
+      console.log(error.message)
+    }
+    setLoading(false);
+  }
+
+  async function handleSendNewFile() {
+    if (!file) return;
+    try {
+      setLoading(true);
+      const fmData = new FormData();
+      fmData.append("file", file);
+      const response = await httpClient.post("/clipadd", fmData);
+      setData(response.data);
+      message.success(`Roupa adicionada com sucesso!`);
     } catch (error) { 
       console.log(error.message)
     }
@@ -93,19 +109,39 @@ export default function Main() {
 
 
   return (
-    <div className="flex flex-col gap-12 items-center py-16 min-h-screen">
-      <h1 className="text-2xl">Detector de roupas</h1>
+    <div className="flex flex-col xl:flex-row gap-12 py-8 px-8 h-screen">
+      <div className="flex flex-col h-full">
 
-      <div className="flex flex-col gap-8">
+          <div className="w-full xl:w-[500px] flex flex-col gap-8 justify-center h-full">
+            <Upload onUpload={(file) => setFile(file)} className="w-full"/>
 
-      <Upload onUpload={(file) => setFile(file)} />
+            <div className="flex gap-4 flex-col" >
+              <Button size="large" onClick={handleSendFile} disabled={!file} className="w-full" loading={loading}>Enviar</Button>
+              <Button size="large" type="dashed" onClick={handleSendNewFile} disabled={!file} className="w-full" loading={loading}>Adicionar ao dataset</Button>
+            </div>
+          </div>
 
-      <Button size="large" onClick={handleSendFile} disabled={!file} className="w-full" loading={loading}>Enviar</Button>
       </div>
 
-      <p>
-        response: <pre>{JSON.stringify(data, null, 2)}</pre>
-      </p>
+      <div className="grid grid-rows-2 grid-cols-2 lg:grid-cols-3 w-full gap-3 pb-8">
+
+        {data.similarItems && (
+          data.similarItems.map((item, index) => {
+            const name = "clothes/" + item.metadata?.fileName
+
+            return (
+              (
+            <div className="overflow-hidden flex flex-col border border-gray-200 rounded-xl w-full items-center justify-center" key={index}>
+              <img src={name} alt="" className="w-80 h-auto"  />
+            </div>
+          )
+            )
+          })
+        )}
+
+      </div>
+
+
     </div>
   );
 }

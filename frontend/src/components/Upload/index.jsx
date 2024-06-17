@@ -9,7 +9,7 @@ import {
   UploadArea,
 } from "./styles";
 
-import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
+import { LoadingOutlined, DeleteOutlined, PictureFilled } from "@ant-design/icons";
 import { message } from "antd";
 
 const fileTypesNames = {
@@ -154,7 +154,9 @@ export default function Upload({ onUpload, accepts, disabled = false }) {
         >
           {loading && <LoadingOutlined />}
           {!loading && (
-            <p style={{ marginTop: "40px" }}>Tire a foto da sua roupa</p>
+            <div className="h-full flex-col flex justify-center items-center">
+              <p style={{ marginTop: "40px" }}>Tire a foto da sua roupa</p>
+            </div>
           )}
           <UploadButton
             disabled={disabled}

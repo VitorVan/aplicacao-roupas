@@ -5,8 +5,7 @@ import { Button } from "antd";
 export const UploadContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  max-width: 500px;
-  width: 94vw;
+  width: 100%;
   gap: 16px;
 `;
 
@@ -28,7 +27,8 @@ export const Image = styled(motion.img)`
 export const ImageContainer = styled(motion.div)`
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 100%;
+  min-height: 500px;
   border-radius: 10px;
   border: 1px solid ${(props) => props.theme.colors.gray[100]};
   overflow: hidden;
@@ -49,7 +49,8 @@ export const UploadArea = styled(motion.div)`
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  height: 200px;
+  height: 100%;
+  min-height: 500px;
   border-radius: 10px;
   border: 1px dashed ${(props) => props.theme.colors.gray[300]};
 
