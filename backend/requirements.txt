@@ -7,7 +7,7 @@ Pillow==10.3.0
 pinecone==4.0.0
 python-dotenv==1.0.1
 rembg
-scikit_learn=
+scikit_learn
 scipy==1.13.1
 uvicorn==0.30.1
 pytorch
