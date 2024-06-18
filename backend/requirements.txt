@@ -10,5 +10,4 @@ rembg
 scikit_learn
 scipy==1.13.1
 uvicorn==0.30.1
-pytorch
 torchvision 
